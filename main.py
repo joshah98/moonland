@@ -1,12 +1,8 @@
 import pygame
 import os
-from movement import rotateImg
+from ship import Ship
+import math
 
-
-def scaleImg(img, factor):
-    rect = img.get_rect()
-    img = pygame.transform.scale(img, (int(rect[2]*factor), int(rect[3]*factor)))
-    return img
 
 WIDTH, HEIGHT = 1800, 1000
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -14,30 +10,24 @@ WHITE = (255,255,255)
 BLUE = (0,0,100)
 FPS = 60
 
-ACTIVE_SHIP = pygame.image.load(os.path.join('img', 'activeship.png'))
-ACTIVE_SHIP = scaleImg(ACTIVE_SHIP, 0.25)
 SHIP = pygame.image.load(os.path.join('img', 'ship.png'))
-SHIP = scaleImg(SHIP, 0.25)
 
-# dimensions of ship
-rect = SHIP.get_rect()
-SHIP_X = rect[2]
-SHIP_Y = rect[3]
 
 pygame.display.set_caption("moonland")
 
 
-def drawWindow(ship, ship_rect):
+def drawWindow(ship, ship_center):
     WIN.fill(BLUE)
-    WIN.blit(ship, (ship_rect.x, ship_rect.y))
+    WIN.blit(ship, ship_center)
     pygame.display.update()
 
 def main():
 
-    angle = 0
     clock = pygame.time.Clock()
 
     run = True
+
+    ship = Ship(SHIP, 0.25, 5, 300, 300, 0)
 
     while run:
         clock.tick(FPS)
@@ -47,15 +37,16 @@ def main():
         
         inputs = pygame.key.get_pressed()
 
-        rotated_ship, rotated_rect = rotateImg(SHIP, angle)
-
         if inputs[pygame.K_LEFT]:
-            angle += 5
-        elif inputs[pygame.K_RIGHT]:
-            angle -= 5
+            ship.rotateImg(5)
+        
+        if inputs[pygame.K_RIGHT]:
+            ship.rotateImg(-5)
 
-
-        drawWindow(rotated_ship, rotated_rect)
+        if inputs[pygame.K_SPACE]:
+            ship.forward()
+        
+        drawWindow(ship.getShip(), ship.getCoords())
 
 
     pygame.quit()
