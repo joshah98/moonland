@@ -1,6 +1,7 @@
 import pygame
 import os
 from ship import Ship
+from planet import Planet
 import math
 
 
@@ -11,14 +12,16 @@ BLUE = (0,0,100)
 FPS = 60
 
 SHIP = pygame.image.load(os.path.join('img', 'ship.png'))
+PLANET = pygame.image.load(os.path.join('img', 'planet1.png'))
 
 
 pygame.display.set_caption("moonland")
 
 
-def drawWindow(ship, ship_center):
+def drawWindow(ship, ship_center, planet, planet_center):
     WIN.fill(BLUE)
     WIN.blit(ship, ship_center)
+    WIN.blit(planet, planet_center)
     pygame.display.update()
 
 def main():
@@ -27,7 +30,9 @@ def main():
 
     run = True
 
-    ship = Ship(SHIP, 0.25, 5, 300, 300, 0)
+    ship = Ship(SHIP, 0.25, 0.05, 300, 300, 0)
+    p1 = Planet(400, PLANET, 1, 500, 700)
+    ship.addPlanet(p1)
 
     while run:
         clock.tick(FPS)
@@ -44,9 +49,11 @@ def main():
             ship.rotateImg(-5)
 
         if inputs[pygame.K_SPACE]:
-            ship.forward()
+            ship.accelerate()
+
+        ship.passiveMove()
         
-        drawWindow(ship.getShip(), ship.getCoords())
+        drawWindow(ship.getShip(), ship.getCoords(), p1.getImg(), p1.getCenter())
 
 
     pygame.quit()
