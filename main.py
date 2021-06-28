@@ -30,7 +30,7 @@ def main():
 
     run = True
 
-    ship = Ship(SHIP, 0.25, 0.05, 300, 300, 0)
+    ship = Ship(SHIP, 0.25, 0.1, 300, 300, 0)
     p1 = Planet(400, PLANET, 1, 500, 700)
     ship.addPlanet(p1)
 
@@ -53,7 +53,7 @@ def main():
 
         ship.passiveMove()
         
-        drawWindow(ship.getShip(), ship.getCoords(), p1.getImg(), p1.getCenter())
+        drawWindow(ship.getShip(), ship.getCoords(), p1.getImg(), p1.getRect())
 
 
     pygame.quit()

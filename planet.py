@@ -5,14 +5,17 @@ class Planet:
     def __init__(self, mass, img, scale, x, y):
         self.mass = mass
         self.img = scaleImg(img, scale)
-        self.center = (x,y)
+        self.rect = self.img.get_rect(center = (x,y))
 
 
     def getImg(self):
         return self.img
 
+    def getRect(self):
+        return self.rect
+
     def getCenter(self):
-        return self.center
+        return self.rect.center
 
     def getMass(self):
         return self.mass

@@ -1,4 +1,5 @@
-import pygame, math
+import pygame,math
+from math import atan2, pi
 from img import scaleImg
 
 G = 8 # Gravitational constant
@@ -34,19 +35,11 @@ class Ship:
             center = planet.getCenter()
             vec = self.vectorComp(center[0], center[1])
 
-            if vec[1] != 0:
-                theta = math.atan(vec[1]/vec[0])
-            elif vec[0] > 0:
-                theta = math.pi/2
-            else:
-                theta = 1.5*math.pi
+            theta = atan2(vec[1],vec[0])
+            theta %= 2*pi
 
             self.x_vel -= G * planet.getMass() * math.cos(theta) / (vec[0]**2 + vec[1]**2)
             self.y_vel -= G * planet.getMass() * math.sin(theta) / (vec[0]**2 + vec[1]**2)
-            print(G * planet.getMass() * math.cos(theta * math.pi / 180) / (vec[0]**2 + vec[1]**2))
-            print(G * planet.getMass() * math.sin(theta * math.pi / 180) / (vec[0]**2 + vec[1]**2))
-            
-
 
         self.rect.y -= self.y_vel
         self.rect.x -= self.x_vel
