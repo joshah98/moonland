@@ -6,7 +6,11 @@ class Planet:
         self.mass = mass
         self.img = scaleImg(img, scale)
         self.rect = self.img.get_rect(center = (x,y))
+        
+        self.mask = pygame.mask.from_surface(self.img)
 
+    def getBorder(self):
+        return self.border
 
     def getImg(self):
         return self.img
@@ -19,3 +23,6 @@ class Planet:
 
     def getMass(self):
         return self.mass
+
+    def getMask(self):
+        return self.mask
