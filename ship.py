@@ -1,19 +1,24 @@
 import pygame,math,os
 from math import atan2, pi
 from img import scaleImg
+from pygame_functions import *
 
 G = 8 # Gravitational constant
 
-class Ship():
+class Ship(pygame.sprite.Sprite):
 
     def __init__(self, img, scale, accel, x, y, angle):
+        super().__init__()
+        
         self.img = scaleImg(img, scale)
         self.default = self.img
         self.accel = accel
         self.angle = angle
         self.rect = self.img.get_rect(center = (x,y))
         self.rotated = self.img
-        self.mask = pygame.mask.from_surface(self.img)
+        self.collided = False
+
+        self.radius = int(self.rect.width * 0.75 / 2)
 
         self.x_vel = 0
         self.y_vel = 0
@@ -35,6 +40,9 @@ class Ship():
 
     def getRect(self):
         return self.rect
+
+    def getRadius(self):
+        return self.radius
 
     def rotateImg(self, angle):
         self.angle += angle
@@ -61,25 +69,16 @@ class Ship():
         # get forces from planets here
         for planet in self.bodies:
             center = planet.getCenter()
-            pRect = planet.getRect()
             vec = self.vectorComp(center[0], center[1])
-            offset = (pRect.topleft[0] - self.rect.topleft[0], pRect.topleft[1] - self.rect.topleft[1])
 
-            if self.mask.overlap(planet.getMask(), offset):
-                self.x_vel, self.y_vel = 0, 0
-            else:
-                theta = atan2(vec[1],vec[0])
-                theta %= 2*pi
+            theta = atan2(vec[1],vec[0])
+            theta %= 2*pi
 
-                m = planet.getMass()
+            m = planet.getMass()
 
-                self.x_vel -= G * m * math.cos(theta) / (vec[0]**2 + vec[1]**2)
-                self.y_vel -= G * m * math.sin(theta) / (vec[0]**2 + vec[1]**2)
+            self.x_vel -= G * m * math.cos(theta) / (vec[0]**2 + vec[1]**2)
+            self.y_vel -= G * m * math.sin(theta) / (vec[0]**2 + vec[1]**2)
 
-
-
-
-            
 
         self.rect.y -= self.y_vel
         self.rect.x -= self.x_vel
@@ -97,6 +96,10 @@ class Ship():
 
     def getCoords(self):
         return (self.rect.x,self.rect.y)
+
+    def stop(self):
+        self.x_vel, self.y_vel = 0, 0
+
 
 
     

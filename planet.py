@@ -1,19 +1,21 @@
 import pygame
 from img import scaleImg
 
-class Planet:
+class Planet(pygame.sprite.Sprite):
     def __init__(self, mass, img, scale, x, y):
-        self.mass = mass
-        self.img = scaleImg(img, scale)
-        self.rect = self.img.get_rect(center = (x,y))
-        
-        self.mask = pygame.mask.from_surface(self.img)
+        super().__init__()
 
+        self.mass = mass
+        self.image = scaleImg(img, scale)
+        self.rect = self.image.get_rect(center = (x,y))
+
+        self.radius = int(self.rect.width * 0.7 / 2)
+        
     def getBorder(self):
         return self.border
 
     def getImg(self):
-        return self.img
+        return self.image
 
     def getRect(self):
         return self.rect
@@ -23,6 +25,3 @@ class Planet:
 
     def getMass(self):
         return self.mass
-
-    def getMask(self):
-        return self.mask
