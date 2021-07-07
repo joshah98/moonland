@@ -10,7 +10,7 @@ WIDTH, HEIGHT = 1800, 1000
 HW, HH = WIDTH/2, HEIGHT/2
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WHITE = (255,255,255)
-BLUE = (0,0,30)
+BLUE = (0,0,20)
 FPS = 60
 SPRITE_DELAY = 5 # Sprite delay is the delay in how frequently the background stars animate
 NUM_STARS = 7
@@ -40,8 +40,8 @@ def main():
 
     run = True
 
-    ship = Ship(SHIP, 2, 0.1, 300, 300, 0)
-    p1 = Planet(400, PLANET, 0.5, HW, HH)
+    ship = Ship(SHIP, 0.7, 0.1, 300, 300, 0)
+    p1 = Planet(400, PLANET, 0.3, HW, HH)
     p2 = Planet(200, PLANET, 0.2, 600, 200)
     ship.addPlanet(p1)
     ship.addPlanet(p2)
@@ -59,37 +59,47 @@ def main():
 
     # Count keeps track of the ticks, for slowing down sprite animation so the FPS is easier to see
     count = 0
+    
+    # If exploded becomes true, begin explosion animation
+    exploded = False
+
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
         
-        # Detect if ship has collided with any planets
-        hit = pygame.sprite.spritecollide(ship, planets, False, pygame.sprite.collide_circle)
-        
-        # If no collision, continue movement and control input
-        if hit:
-            ship.stop()
-        else:
-            inputs = pygame.key.get_pressed()
 
-            if inputs[pygame.K_LEFT]:
-                ship.rotateImg(5)
-            
-            if inputs[pygame.K_RIGHT]:
-                ship.rotateImg(-5)
+        if not exploded:
+            # Detect if ship has collided with any planets
+            hit = pygame.sprite.spritecollide(ship, planets, False, pygame.sprite.collide_circle)
 
-            if inputs[pygame.K_SPACE]:
-                # Need the isAccelerating function for the acceleration animation
-                ship.isAccelerating(True)
-                ship.accelerate()
+            # If no collision, continue movement and control input
+            if hit:
+                ship.stop()
+                exploded = True
             else:
-                ship.isAccelerating(False)
+                inputs = pygame.key.get_pressed()
+
+                if inputs[pygame.K_LEFT]:
+                    ship.rotateImg(5)
+                
+                if inputs[pygame.K_RIGHT]:
+                    ship.rotateImg(-5)
+
+                if inputs[pygame.K_SPACE]:
+                    # Need the isAccelerating function for the acceleration animation
+                    ship.isAccelerating(True)
+                    ship.accelerate()
+                else:
+                    ship.isAccelerating(False)
 
 
-            # Passive move includes the ships acceleration due to input, as well as gravity from nearby planets
-            ship.passiveMove()
+                # Passive move includes the ships acceleration due to input, as well as gravity from nearby planets
+                ship.passiveMove()
+        else:
+            # Begin explosion animation
+            ship.explode()
         
         drawWindow(ship.getShip(), ship.getCoords(), planets, bg_sprites, count)            
 

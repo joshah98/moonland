@@ -31,6 +31,23 @@ class Ship(pygame.sprite.Sprite):
         self.frames.append(scaleImg(pygame.image.load(os.path.join('img', 'activeship3.png')), scale))
         self.frames.append(scaleImg(pygame.image.load(os.path.join('img', 'activeship4.png')), scale))
 
+        self.explosion = []
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion1.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion2.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion3.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion4.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion5.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion6.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion7.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion8.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion9.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion10.png')), scale))
+        self.explosion.append(scaleImg(pygame.image.load(os.path.join('img', 'explosion11.png')), scale))
+
+        self.explosion_frame = 0
+
+        self.rubble = scaleImg(pygame.image.load(os.path.join('img', 'rubble.png')), scale)
+
         self.current = 0
         self.image = self.frames[self.current]
 
@@ -99,6 +116,18 @@ class Ship(pygame.sprite.Sprite):
 
     def stop(self):
         self.x_vel, self.y_vel = 0, 0
+
+    def explode(self):
+        if self.explosion_frame < len(self.explosion):
+            self.rotated = pygame.transform.rotozoom(self.explosion[self.explosion_frame], self.angle, 1)
+
+            # Delay between each tick to make frames easier to see
+            # This can be delayed because no other processes need to happen simultaneously during this animation,
+            # as opposed to the acceleration animation
+            pygame.time.wait(40)
+            self.explosion_frame += 1
+        else:
+         self.rotated = pygame.transform.rotozoom(self.rubble, self.angle, 1)
 
 
 
