@@ -117,6 +117,9 @@ class Ship(pygame.sprite.Sprite):
     def stop(self):
         self.x_vel, self.y_vel = 0, 0
 
+    # Goes through explosion animation, and renders rubble image after animation complete
+    # Returns false during animation, and true after it's done
+    # Render game over after this function returns true
     def explode(self):
         if self.explosion_frame < len(self.explosion):
             self.rotated = pygame.transform.rotozoom(self.explosion[self.explosion_frame], self.angle, 1)
@@ -126,8 +129,11 @@ class Ship(pygame.sprite.Sprite):
             # as opposed to the acceleration animation
             pygame.time.wait(40)
             self.explosion_frame += 1
+
+            return False
         else:
-         self.rotated = pygame.transform.rotozoom(self.rubble, self.angle, 1)
+            self.rotated = pygame.transform.rotozoom(self.rubble, self.angle, 1)
+            return True
 
 
 
