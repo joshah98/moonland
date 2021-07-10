@@ -114,6 +114,9 @@ class Ship(pygame.sprite.Sprite):
     def getCoords(self):
         return (self.rect.x,self.rect.y)
 
+    def getVelocity(self):
+        return (self.x_vel**2 + self.y_vel**2)**0.5
+
     def stop(self):
         self.x_vel, self.y_vel = 0, 0
 
