@@ -2,8 +2,10 @@ import pygame
 from img import scaleImg
 
 class Planet(pygame.sprite.Sprite):
-    def __init__(self, mass, img, scale, x, y):
+    def __init__(self, mass, img, scale, x, y, is_end):
         super().__init__()
+
+        self.is_end = is_end
 
         self.mass = mass
         self.image = scaleImg(img, scale)
@@ -25,3 +27,6 @@ class Planet(pygame.sprite.Sprite):
 
     def getMass(self):
         return self.mass
+
+    def isEnd(self):
+        return self.is_end
